@@ -26,6 +26,10 @@ class gpio():
 
     def toggle(self):
         GPIO.output(self.pin_num, not self.value)
+        
+    def set(self, value):
+        GPIO.output(self.pin_num, value)
+        self.value = value
 
     def read(self):
         return GPIO.input(self.pin_num)
