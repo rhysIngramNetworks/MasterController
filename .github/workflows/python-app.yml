@@ -31,4 +31,4 @@ jobs:
         autopep8 --in-place --aggressive --aggressive -r --exclude tests . 
     - name: Ruff formatting check
       run: |
-        ruff check --exclude --fix .
+        ruff check --fix .
