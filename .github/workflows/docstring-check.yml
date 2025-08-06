@@ -1,0 +1,21 @@
+# .github/workflows/pydoclint.yml
+name: Docstring Lint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install linter
+        run: pip install pydoclint
+
+      - name: Run pydoclint
+        run: pydoclint --style=google . --exclude .github,venv,.gitignore
