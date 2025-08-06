@@ -2,6 +2,7 @@ import sys
 import time
 
 sys.path.append("/home/trains/Documents/repositories/MasterController/")
+sys.path.append("C:/Users/RhysHopkins/Documents/repositories/MasterController/")
 
 from modem.modem_controller import ModemController
 

@@ -1,4 +1,5 @@
 import telnetlib
+import time
 
 
 class ModemController:
@@ -30,11 +31,80 @@ class ModemController:
         self.telnet.read_until(b"Password:")
         self.telnet.write(self.password2.encode("utf-8") + b"\n")
 
-    def enable(self, enable):
-        pass
+    def set_acm(self, acm_level):
+        #Main Menu
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"3\n")
+
+        #Modules
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"1\n")
+
+        #TX Modules
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"2\n")
+
+        #AcmController
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"1\n")
+
+        #Enter Profile Manual Value
+        self.telnet.read_until(b"(y/n x=exit)")
+        self.telnet.write("y\n".encode("utf-8"))
+
+        #Set Profile Manual Value
+        self.telnet.read_until(b"('x' to Exit):")
+
+        mod_rate = str(acm_level)
+        self.telnet.write(mod_rate.encode("utf-8") + b"\n")
+
+        self.return_to_main_menu()
+
+    def set_dc_offset(self):
+        #Main Menu
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"3\n")
+
+        #Modules
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"1\n")
+
+        #TX Modules
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"2\n")
+
+        #Digital Tx
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"6\n")
+
+        #Configure DC Offset
+        self.telnet.read_until(b"x. Exit")
+        self.telnet.write(b"4\n")
+
+        #Enter DC Offsets
+        self.telnet.read_until(b"(y/n x=exit)")
+        self.telnet.write("n\n".encode("utf-8"))
+
+        #Set DC Offsets
+        for _ in range(3):
+            self.telnet.read_until(b"('x' to Exit):")
+            mod_rate = str(0)
+            self.telnet.write(mod_rate.encode("utf-8") + b"\n")
+
+        #Confirm DC Offsets
+        self.telnet.read_until(b"(y/n x=exit)")
+        self.telnet.write("y\n".encode("utf-8"))
+
+        self.return_to_main_menu()
 
     def return_to_main_menu(self):
-        pass
+        self.telnet.read_until("Exit")
+        return
+
+    def close(self):
+        time.sleep(0.5)
+        # Close the Telnet session when done
+        self.telnet.close()
 
     
 """
