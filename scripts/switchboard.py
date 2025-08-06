@@ -2,8 +2,6 @@ import sys
 
 sys.path.append("/home/trains/Documents/repositories/MasterController/")
 
-from communications.gpio import gpio
-
 import RPi.GPIO as GPIO
 GPIO.setwarnings(False)
 
