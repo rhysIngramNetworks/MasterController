@@ -31,6 +31,11 @@ class ModemController:
         self.telnet.read_until(b"Password:")
         self.telnet.write(self.password2.encode("utf-8") + b"\n")
 
+        print("login complete")
+
+    def enter_command(self, command):
+        self.telnet.write(command.encode("utf-8")+b"\n")
+
     def set_acm(self, acm_level):
         #Main Menu
         self.telnet.read_until(b"x. Exit")
@@ -98,8 +103,27 @@ class ModemController:
         self.return_to_main_menu()
 
     def return_to_main_menu(self):
-        self.telnet.read_until("Exit")
-        return
+        read = self.telnet.read_some()
+        exit_phrase = "Are you sure you want to exit session (Y or N)"
+        while (read.decode("utf-8").find("Exit") == -1):
+            read = self.telnet.read_some()
+            for i in range(len(exit_phrase))[len(exit_phrase)//2:-1]:
+                if (read.decode("utf-8").find(exit_phrase[:len(exit_phrase)-i]) != -1) or \
+                    (read.decode("utf-8").find(exit_phrase[i:len(exit_phrase)]) != -1):
+                    self.enter_command("N")
+                    return
+                
+            self.exit_current_menu()
+            break
+            
+        self.return_to_main_menu()
+
+    def exit_current_menu(self):
+        self.enter_command("x")
+
+    def logout(self):
+        self.exit_current_menu()
+        self.enter_command("Y")
 
     def close(self):
         time.sleep(0.5)
